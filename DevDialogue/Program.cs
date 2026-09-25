@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using DevDialogue.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Додаємо підтримку контролерів
@@ -13,6 +16,9 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("SupabaseConnection")));
 
 var app = builder.Build();
 
