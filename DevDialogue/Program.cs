@@ -35,4 +35,19 @@ app.MapGet("/api/health/ping", () => Results.Ok(new {
     timestamp = DateTime.UtcNow 
 }));
 
+app.MapGet("/api/health/db", async (AppDbContext db) =>
+{
+    try
+    {
+        var canConnect = await db.Database.CanConnectAsync();
+        return canConnect
+            ? Results.Ok(new { status = "DB connected" })
+            : Results.StatusCode(500);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
+});
+
 app.Run();
